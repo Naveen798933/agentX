@@ -3,13 +3,8 @@
 -- Description: Adds organizational_memories with vector embeddings, memory_associations, model_providers, and model_routing_policies
 
 -- 1. Optional pgvector extension setup
-DO $$
-BEGIN
-  CREATE EXTENSION IF NOT EXISTS vector;
-EXCEPTION
-  WHEN OTHERS THEN
-    RAISE NOTICE 'pgvector extension not available on this host; falling back to JSON embedding storage';
-END $$;
+-- Note: On hosted PostgreSQL or Supabase with pgvector enabled, run CREATE EXTENSION IF NOT EXISTS vector
+
 
 -- 2. Model Providers Table
 CREATE TABLE IF NOT EXISTS model_providers (

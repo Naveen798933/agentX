@@ -185,3 +185,4 @@ Run all test suites locally:
 ## 🛡️ License & Attestation
 
 Built with Node.js ES Modules, SQLite WAL, and PostgreSQL 16. Designed for enterprise deployment.
+

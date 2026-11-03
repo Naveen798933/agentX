@@ -27,13 +27,24 @@ export class PostgresStorageAdapter {
     const cfg = config || {};
     let poolConfig = {};
 
+    const isSupabaseOrSsl = (connStr) =>
+      process.env.POSTGRES_SSL === 'true' ||
+      (typeof connStr === 'string' && connStr.includes('supabase.co'));
+
     if (typeof cfg === 'string') {
-      poolConfig = { connectionString: cfg };
-    } else if (cfg.connectionString) {
-      poolConfig = { ...cfg };
-    } else {
       poolConfig = {
-        connectionString: process.env.DATABASE_URL || undefined,
+        connectionString: cfg,
+        ssl: isSupabaseOrSsl(cfg) ? { rejectUnauthorized: false } : false
+      };
+    } else if (cfg.connectionString) {
+      poolConfig = {
+        ...cfg,
+        ssl: isSupabaseOrSsl(cfg.connectionString) ? { rejectUnauthorized: false } : (cfg.ssl || false)
+      };
+    } else {
+      const connStr = process.env.DATABASE_URL || undefined;
+      poolConfig = {
+        connectionString: connStr,
         host: cfg.host || process.env.POSTGRES_HOST || '127.0.0.1',
         port: Number(cfg.port || process.env.POSTGRES_PORT || 5432),
         database: cfg.database || process.env.POSTGRES_DB || 'pulse_workspace',
@@ -42,7 +53,7 @@ export class PostgresStorageAdapter {
         max: Number(cfg.maxConnections || process.env.POSTGRES_POOL_MAX || 10),
         idleTimeoutMillis: Number(cfg.idleTimeoutMillis || 30000),
         connectionTimeoutMillis: Number(cfg.connectionTimeoutMillis || 5000),
-        ssl: process.env.POSTGRES_SSL === 'true' ? { rejectUnauthorized: false } : false
+        ssl: isSupabaseOrSsl(connStr) ? { rejectUnauthorized: false } : (process.env.POSTGRES_SSL === 'true' ? { rejectUnauthorized: false } : false)
       };
     }
 
