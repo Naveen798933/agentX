@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PULSE — Real-Time Collaborative Team Workspace</title>
+  <meta name="description" content="Production-grade real-time collaborative workspace featuring multi-channel chat, interactive Kanban task board, live presence, and zero-latency SSE event streaming.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient background glow orbs -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <div class="workspace-app">
+
+    <!-- ── TOP NAVIGATION ─────────────────────────────────────────────── -->
+    <header class="workspace-header glass-panel">
+      <div class="header-brand">
+        <div class="brand-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+        </div>
+        <div class="brand-info">
+          <div class="brand-title-wrap">
+            <h1 class="brand-title">PULSE</h1>
+            <span class="badge-tag">REAL-TIME WORKSPACE</span>
+          </div>
+          <p class="brand-subtitle">Multi-Channel Chat · Live Kanban · SSE Synchronized</p>
+        </div>
+      </div>
+
+      <!-- Live Telemetry Ticker -->
+      <div class="telemetry-bar">
+        <div class="telemetry-item" id="sse-indicator">
+          <span class="pulse-dot active"></span>
+          <span class="telemetry-label">SSE: <strong id="sse-status">CONNECTING...</strong></span>
+        </div>
+        <div class="telemetry-item">
+          <span class="telemetry-icon">👥</span>
+          <span class="telemetry-label"><strong id="stat-online-users">0</strong> Online</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="telemetry-icon">📋</span>
+          <span class="telemetry-label"><strong id="stat-tasks-done">0%</strong> Tasks Done</span>
+        </div>
+        <div class="telemetry-item">
+          <span class="telemetry-icon">💬</span>
+          <span class="telemetry-label"><strong id="stat-total-messages">0</strong> Messages</span>
+        </div>
+      </div>
+
+      <!-- User Session Switcher & Actions -->
+      <div class="header-user-controls">
+        <div class="active-user-selector" title="Switch active persona to test real-time collaboration">
+          <span class="selector-label">Acting As:</span>
+          <div class="user-select-box" id="user-dropdown-btn">
+            <span class="user-avatar" id="current-user-avatar">👩‍💼</span>
+            <div class="user-details">
+              <span class="user-name" id="current-user-name">Sofia Ramos</span>
+              <span class="user-status-pill" id="current-user-status">● Online</span>
+            </div>
+            <span class="dropdown-chevron">▼</span>
+          </div>
+          <div class="user-dropdown-menu hidden" id="user-dropdown-menu">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <button class="btn-sound-toggle" id="btn-toggle-sound" title="Toggle audio effects (Mute/Unmute)" aria-label="Toggle Sound">
+          <span id="sound-icon">🔊</span>
+        </button>
+
+        <button class="btn btn-primary" id="btn-open-task-modal">
+          <span class="btn-icon">＋</span> New Task
+        </button>
+      </div>
+    </header>
+
+    <!-- ── MAIN CONTENT LAYOUT ───────────────────────────────────────── -->
+    <div class="workspace-main">
+
+      <!-- LEFT SIDEBAR: Channels & Team Roster -->
+      <aside class="workspace-sidebar glass-panel">
+        
+        <!-- Channels Section -->
+        <div class="sidebar-section">
+          <div class="section-header">
+            <h2 class="section-title">CHANNELS</h2>
+            <button class="icon-btn-tiny" id="btn-add-channel" title="Create Channel">＋</button>
+          </div>
+          <ul class="channel-list" id="channel-list">
+            <!-- Populated dynamically -->
+          </ul>
+        </div>
+
+        <!-- Views Switcher -->
+        <div class="sidebar-section">
+          <div class="section-header">
+            <h2 class="section-title">WORKSPACE VIEWS</h2>
+          </div>
+          <nav class="views-nav">
+            <button class="view-nav-btn active" data-view="chat">
+              <span class="nav-icon">💬</span> Channel Chat
+            </button>
+            <button class="view-nav-btn" data-view="kanban">
+              <span class="nav-icon">📋</span> Kanban Board
+              <span class="badge-count" id="badge-kanban-count">0</span>
+            </button>
+            <button class="view-nav-btn" data-view="activity">
+              <span class="nav-icon">⚡</span> Live Activity
+            </button>
+          </nav>
+        </div>
+
+        <!-- Team Presence Section -->
+        <div class="sidebar-section team-section">
+          <div class="section-header">
+            <h2 class="section-title">TEAM PRESENCE (<span id="team-online-count">0</span>)</h2>
+          </div>
+          <ul class="team-list" id="team-list">
+            <!-- Populated dynamically -->
+          </ul>
+        </div>
+
+        <!-- Latency & Connection Footer -->
+        <div class="sidebar-footer">
+          <div class="connection-stats">
+            <span class="conn-dot"></span>
+            <span class="conn-text">Zero-Dependency Node.js 22 · WAL SQLite</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- CENTER STAGE (Tab Views) -->
+      <main class="workspace-stage" id="workspace-stage">
+
+        <!-- ── VIEW 1: LIVE CHAT ──────────────────────────────────────── -->
+        <section class="view-panel active" id="view-chat">
+          <div class="chat-container glass-panel">
+            <!-- Channel Top Bar -->
+            <div class="chat-header">
+              <div class="channel-header-info">
+                <div class="channel-title-row">
+                  <span class="channel-hash" id="active-channel-icon">#</span>
+                  <h2 class="active-channel-name" id="active-channel-name">engineering</h2>
+                </div>
+                <p class="channel-topic" id="active-channel-topic">Loading channel topic...</p>
+              </div>
+              <div class="channel-actions">
+                <div class="search-input-wrap">
+                  <span class="search-icon">🔍</span>
+                  <input type="text" id="chat-search" placeholder="Search messages..." />
+                </div>
+              </div>
+            </div>
+
+            <!-- Messages Stream Area -->
+            <div class="chat-messages-scroll" id="chat-messages-scroll">
+              <div class="messages-container" id="messages-container">
+                <!-- Messages injected dynamically -->
+              </div>
+            </div>
+
+            <!-- Live Typing Notification Bar -->
+            <div class="typing-indicator-bar" id="typing-indicator-bar">
+              <div class="typing-dots"><span></span><span></span><span></span></div>
+              <span class="typing-text" id="typing-text"></span>
+            </div>
+
+            <!-- Message Compose Box -->
+            <div class="chat-composer">
+              <div class="composer-card">
+                <textarea 
+                  id="message-input" 
+                  rows="2" 
+                  placeholder="Message #engineering... (Press Enter to send, Shift+Enter for new line)"
+                ></textarea>
+                <div class="composer-toolbar">
+                  <div class="toolbar-left">
+                    <button class="tool-btn" id="btn-insert-code" title="Insert Code Block">
+                      <code>&lt;/&gt;</code>
+                    </button>
+                    <button class="tool-btn" id="btn-insert-rocket" title="Insert Rocket">🚀</button>
+                    <button class="tool-btn" id="btn-insert-fire" title="Insert Fire">🔥</button>
+                    <button class="tool-btn" id="btn-insert-check" title="Insert Check">✅</button>
+                  </div>
+                  <div class="toolbar-right">
+                    <span class="shortcut-hint">Enter ↵ to send</span>
+                    <button class="btn btn-primary btn-sm" id="btn-send-message">
+                      <span>Send</span>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── VIEW 2: INTERACTIVE KANBAN BOARD ───────────────────────── -->
+        <section class="view-panel" id="view-kanban">
+          <div class="kanban-container">
+            <div class="kanban-header glass-panel">
+              <div class="kanban-title-wrap">
+                <h2>Sprint Tasks & Delivery Board</h2>
+                <p>Drag & drop cards across stages or use quick-action buttons. Real-time updates broadcast via SSE.</p>
+              </div>
+              <button class="btn btn-secondary btn-sm" id="btn-quick-add-task">
+                <span>＋ Add Task</span>
+              </button>
+            </div>
+
+            <div class="kanban-grid">
+              <!-- Backlog Column -->
+              <div class="kanban-column" data-stage="backlog">
+                <div class="column-header col-backlog">
+                  <div class="col-title-wrap">
+                    <span class="col-dot"></span>
+                    <h3 class="col-title">BACKLOG</h3>
+                  </div>
+                  <span class="col-count" id="count-backlog">0</span>
+                </div>
+                <div class="kanban-dropzone" id="dropzone-backlog">
+                  <!-- Task Cards -->
+                </div>
+              </div>
+
+              <!-- In Progress Column -->
+              <div class="kanban-column" data-stage="in_progress">
+                <div class="column-header col-inprogress">
+                  <div class="col-title-wrap">
+                    <span class="col-dot"></span>
+                    <h3 class="col-title">IN PROGRESS</h3>
+                  </div>
+                  <span class="col-count" id="count-in_progress">0</span>
+                </div>
+                <div class="kanban-dropzone" id="dropzone-in_progress">
+                  <!-- Task Cards -->
+                </div>
+              </div>
+
+              <!-- In Review Column -->
+              <div class="kanban-column" data-stage="review">
+                <div class="column-header col-review">
+                  <div class="col-title-wrap">
+                    <span class="col-dot"></span>
+                    <h3 class="col-title">IN REVIEW</h3>
+                  </div>
+                  <span class="col-count" id="count-review">0</span>
+                </div>
+                <div class="kanban-dropzone" id="dropzone-review">
+                  <!-- Task Cards -->
+                </div>
+              </div>
+
+              <!-- Done Column -->
+              <div class="kanban-column" data-stage="done">
+                <div class="column-header col-done">
+                  <div class="col-title-wrap">
+                    <span class="col-dot"></span>
+                    <h3 class="col-title">COMPLETED</h3>
+                  </div>
+                  <span class="col-count" id="count-done">0</span>
+                </div>
+                <div class="kanban-dropzone" id="dropzone-done">
+                  <!-- Task Cards -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── VIEW 3: LIVE ACTIVITY AUDIT STREAM ─────────────────────── -->
+        <section class="view-panel" id="view-activity">
+          <div class="activity-container glass-panel">
+            <div class="activity-header">
+              <div>
+                <h2>Real-Time Workspace Audit Log</h2>
+                <p>Cryptographic chronological record of all team events, commits, tasks, and presence changes.</p>
+              </div>
+              <button class="btn btn-secondary btn-sm" id="btn-refresh-activity">
+                <span>🔄 Refresh</span>
+              </button>
+            </div>
+            <div class="activity-timeline" id="activity-timeline">
+              <!-- Logs populated dynamically -->
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+    <!-- ── MODAL: CREATE TASK ─────────────────────────────────────────── -->
+    <div class="modal-backdrop hidden" id="modal-task-backdrop">
+      <div class="modal-card glass-panel">
+        <div class="modal-header">
+          <h3 class="modal-title">Create New Task</h3>
+          <button class="modal-close" id="btn-close-task-modal">✕</button>
+        </div>
+        <form class="modal-form" id="form-create-task">
+          <div class="form-group">
+            <label for="task-title-input">Task Title *</label>
+            <input type="text" id="task-title-input" required placeholder="e.g. Implement WebSocket heartbeat reconnection" />
+          </div>
+          <div class="form-group">
+            <label for="task-desc-input">Description</label>
+            <textarea id="task-desc-input" rows="3" placeholder="Context, requirements, and acceptance criteria..."></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="task-stage-select">Initial Stage</label>
+              <select id="task-stage-select">
+                <option value="backlog">Backlog</option>
+                <option value="in_progress">In Progress</option>
+                <option value="review">In Review</option>
+                <option value="done">Completed</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="task-priority-select">Priority</label>
+              <select id="task-priority-select">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+                <option value="urgent">Urgent 🔥</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="task-assignee-select">Assignee</label>
+              <select id="task-assignee-select">
+                <!-- Dynamically filled with team members -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="task-tags-input">Tags (comma-separated)</label>
+              <input type="text" id="task-tags-input" placeholder="core, backend, ui" />
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" id="btn-cancel-task">Cancel</button>
+            <button type="submit" class="btn btn-primary">Create Task</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ── MODAL: CREATE CHANNEL ──────────────────────────────────────── -->
+    <div class="modal-backdrop hidden" id="modal-channel-backdrop">
+      <div class="modal-card glass-panel">
+        <div class="modal-header">
+          <h3 class="modal-title">Create New Channel</h3>
+          <button class="modal-close" id="btn-close-channel-modal">✕</button>
+        </div>
+        <form class="modal-form" id="form-create-channel">
+          <div class="form-group">
+            <label for="channel-name-input">Channel Name *</label>
+            <div class="input-prefix-wrap">
+              <span class="input-prefix">#</span>
+              <input type="text" id="channel-name-input" required placeholder="e.g. security-audits" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="channel-topic-input">Topic</label>
+            <input type="text" id="channel-topic-input" placeholder="What is this channel about?" />
+          </div>
+          <div class="form-group">
+            <label for="channel-icon-select">Icon</label>
+            <select id="channel-icon-select">
+              <option value="💬">💬 Chat</option>
+              <option value="⚡">⚡ Engineering</option>
+              <option value="🎨">🎨 Design</option>
+              <option value="🛡️">🛡️ Security</option>
+              <option value="🚀">🚀 Releases</option>
+              <option value="📢">📢 Announcements</option>
+              <option value="💡">💡 Brainstorming</option>
+            </select>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" id="btn-cancel-channel">Cancel</button>
+            <button type="submit" class="btn btn-primary">Create Channel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js" type="module"></script>
+</body>
+</html>

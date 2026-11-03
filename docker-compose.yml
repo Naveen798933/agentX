@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  virtual-software-house:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ai-virtual-software-house:latest
+    container_name: ai_virtual_software_house
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-3.5-flash-lite}
+      - GEMINI_RPM_LIMIT=14
+    volumes:
+      # Persistent storage volume for SQLite databases and generated project workspaces
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/status').then(r => r.ok ? process.exit(0) : process.exit(1)).catch(() => process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s

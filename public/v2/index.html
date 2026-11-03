@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pulse 2.0 — Autonomous AI Software Enterprise IDE</title>
+  <link rel="stylesheet" href="/v2/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="pulse-v2-body">
+  <!-- Top Glass Navigation Bar -->
+  <header class="v2-navbar glass-panel">
+    <div class="nav-brand">
+      <div class="brand-orb"></div>
+      <span class="brand-title">PULSE <span class="badge-v2">2.0 ENTERPRISE</span></span>
+    </div>
+
+    <div class="nav-controls">
+      <div class="control-group">
+        <label for="project-select">Project:</label>
+        <select id="project-select" class="glass-select">
+          <option value="proj-default">Pulse Enterprise Core</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label for="model-gateway-select">Model Gateway:</label>
+        <select id="model-gateway-select" class="glass-select">
+          <option value="CASCADE">Auto Fallback Cascade (Claude -> Gemini -> DeepSeek)</option>
+          <option value="CLAUDE">Anthropic Claude 3.5 Sonnet</option>
+          <option value="GEMINI">Google Gemini 3.5 Flash</option>
+          <option value="DEEPSEEK">DeepSeek Coder V2.5</option>
+          <option value="OLLAMA">On-Premise Ollama</option>
+        </select>
+      </div>
+
+      <div class="status-indicator">
+        <span class="pulse-dot online"></span>
+        <span id="connection-status-text">Gateway Online</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Multi-Pane IDE Workspace -->
+  <main class="v2-workspace">
+    <!-- Left Pane: 13-Agent Persona Roster & Squads -->
+    <aside class="v2-sidebar glass-panel">
+      <div class="sidebar-header">
+        <h3>AI Engineering Organization</h3>
+        <span class="agent-count-badge">13 Personas</span>
+      </div>
+
+      <div class="squad-container" id="squad-container">
+        <!-- Rendered by app.js: Product Squad, Engineering Squad, Assurance Squad -->
+        <div class="squad-section" data-squad="PRODUCT">
+          <div class="squad-header">
+            <span class="squad-icon">📌</span>
+            <span class="squad-name">Product Squad</span>
+          </div>
+          <div class="squad-agents" id="squad-product-agents"></div>
+        </div>
+
+        <div class="squad-section" data-squad="ENGINEERING">
+          <div class="squad-header">
+            <span class="squad-icon">⚡</span>
+            <span class="squad-name">Engineering Squad</span>
+          </div>
+          <div class="squad-agents" id="squad-engineering-agents"></div>
+        </div>
+
+        <div class="squad-section" data-squad="ASSURANCE">
+          <div class="squad-header">
+            <span class="squad-icon">🛡️</span>
+            <span class="squad-name">Assurance Squad</span>
+          </div>
+          <div class="squad-agents" id="squad-assurance-agents"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Center Pane: Tabbed Core Operations -->
+    <section class="v2-center-stage glass-panel">
+      <nav class="center-tabs">
+        <button class="tab-btn active" data-tab="dag-tab">Visual DAG Pipeline</button>
+        <button class="tab-btn" data-tab="a2a-tab">A2A Squad Dialogue & Review</button>
+        <button class="tab-btn" data-tab="qa-tab">Browser QA & Visual Diff</button>
+        <button class="tab-btn" data-tab="memory-tab">Institutional Vector Memory</button>
+        <button class="tab-btn" data-tab="audit-tab">Tamper-Evident Audit</button>
+      </nav>
+
+      <div class="tab-content active" id="dag-tab">
+        <div class="dag-header-toolbar">
+          <div class="pipeline-status-banner">
+            <span>Status: <strong id="dag-status-pill">READY</strong></span>
+            <span>Current Stage: <strong id="dag-stage-pill">STAGE_PRD</strong></span>
+          </div>
+          <div class="pipeline-actions">
+            <button id="btn-run-pipeline" class="glow-button primary">Synthesize Project</button>
+            <button id="btn-pause-pipeline" class="glow-button secondary">Pause</button>
+          </div>
+        </div>
+        <div class="dag-canvas" id="dag-canvas">
+          <!-- Interactive Node Pipeline Graph -->
+        </div>
+      </div>
+
+      <div class="tab-content" id="a2a-tab">
+        <div class="a2a-layout">
+          <div class="a2a-thread-list" id="a2a-thread-list">
+            <h4>Conversation Threads</h4>
+            <div id="thread-items-container"></div>
+          </div>
+          <div class="a2a-chat-view" id="a2a-chat-view">
+            <div class="chat-header">
+              <span id="active-thread-title">Peer Review: Architecture & Interface</span>
+              <button id="btn-arbitrate-lead" class="glow-button warning">Request Tech Lead Arbitration</button>
+            </div>
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="critique-drawer" id="critique-drawer">
+              <h5>Discovered Peer Critiques</h5>
+              <div id="critique-items"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="qa-tab">
+        <div class="qa-dashboard-layout">
+          <div class="qa-toolbar">
+            <button id="btn-run-qa-suite" class="glow-button primary">Execute Autonomous Browser QA</button>
+            <div class="qa-score-gauge">
+              <span>WCAG 2.1 Score:</span>
+              <strong id="a11y-score-display">100/100</strong>
+            </div>
+          </div>
+          <div class="qa-results-container">
+            <div class="qa-steps-list" id="qa-steps-list">
+              <h4>Interaction Trace</h4>
+              <ul id="qa-step-items"></ul>
+            </div>
+            <div class="qa-visual-diff-viewer" id="qa-visual-diff-viewer">
+              <h4>Visual Regression Diff</h4>
+              <div class="diff-canvas-placeholder" id="diff-canvas-placeholder">
+                <p>Click "Execute Autonomous Browser QA" to run headless verification</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="memory-tab">
+        <div class="memory-search-bar">
+          <input type="text" id="memory-query-input" placeholder="Search institutional memory (e.g. ADRs, security rules, past bug fixes)..." class="glass-input" />
+          <button id="btn-search-memory" class="glow-button primary">Semantic Search</button>
+        </div>
+        <div class="memory-results" id="memory-results-container">
+          <p class="placeholder-text">Type a query above to search organizational knowledge embeddings.</p>
+        </div>
+      </div>
+
+      <div class="tab-content" id="audit-tab">
+        <div class="audit-toolbar">
+          <button id="btn-verify-audit-chain" class="glow-button secondary">Verify Cryptographic Hash Chain</button>
+          <span id="audit-verification-badge" class="badge-neutral">Verification Pending</span>
+        </div>
+        <div class="audit-stream" id="audit-stream-container">
+          <!-- Tamper-evident log entries -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Pane: Split Preview & Code Diff Viewer -->
+    <aside class="v2-preview-pane glass-panel">
+      <div class="pane-tabs">
+        <button class="pane-tab-btn active" data-pane="preview-frame">Live Preview</button>
+        <button class="pane-tab-btn" data-pane="code-diff-frame">Diff Inspector</button>
+      </div>
+
+      <div class="pane-view active" id="preview-frame-container">
+        <iframe id="app-preview-iframe" src="/api/projects/proj-default/preview/" title="Application Preview"></iframe>
+      </div>
+
+      <div class="pane-view" id="code-diff-frame-container">
+        <pre class="code-diff-block"><code id="code-diff-content">// Generated code diffs will appear here in real-time</code></pre>
+      </div>
+    </aside>
+  </main>
+
+  <script type="module" src="/v2/app.js"></script>
+</body>
+</html>
+

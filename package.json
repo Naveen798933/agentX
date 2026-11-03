@@ -1,0 +1,52 @@
+{
+  "name": "ai-virtual-software-house",
+  "version": "0.1.0",
+  "description": "Autonomous multi-agent software engineering organization platform with sandboxing, budget enforcement, and explicit approval gates.",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "./bin/node --test tests/*.test.js apps/collaborative-workspace/tests/*.test.js",
+    "test:all": "./bin/node --test tests/*.test.js apps/collaborative-workspace/tests/*.test.js",
+    "test:unit": "./bin/node --test tests/milestone0.test.js tests/agents.test.js tests/lifecycle.test.js tests/deep_prompt_requirements.test.js",
+    "test:integration": "./bin/node --test tests/server.test.js tests/postgres_persistence.test.js tests/async_queues_and_workers.test.js tests/artifact_storage_and_zip.test.js tests/observability_and_billing.test.js tests/preview_manager.test.js apps/collaborative-workspace/tests/*.test.js",
+    "test:e2e": "./bin/node --test tests/autonomous_build.test.js tests/prompt_driven_projects.test.js tests/audit_engine.test.js tests/audit_real_ai_generation.test.js",
+    "test:security": "./bin/node --test tests/security.test.js tests/sandbox_isolation.test.js tests/auth_rbac_security.test.js",
+    "test:smoke": "./bin/node --test tests/preview_and_deployment.test.js tests/zip_export_and_containerization.test.js tests/llm_resilience_and_recovery.test.js",
+    "test:m0": "./bin/node --test tests/milestone0.test.js",
+    "test:m1": "./bin/node --test tests/agents.test.js",
+    "test:m2": "./bin/node --test tests/lifecycle.test.js",
+    "test:m3": "./bin/node --test tests/server.test.js",
+    "test:m4": "./bin/node --test tests/security.test.js",
+    "test:realtime": "./bin/node --test apps/collaborative-workspace/tests/workspace.test.js",
+    "test:audit": "./bin/node --test tests/audit_engine.test.js",
+    "test:preview": "./bin/node --test tests/preview_manager.test.js",
+    "test:autonomous": "./bin/node --test tests/autonomous_build.test.js",
+    "test:prompt": "./bin/node --test tests/prompt_driven_projects.test.js",
+    "test:resilience": "./bin/node --test tests/llm_resilience_and_recovery.test.js",
+    "test:zip": "./bin/node --test tests/zip_export_and_containerization.test.js",
+    "server": "./bin/node src/server/server.js",
+    "dev": "./bin/node src/server/server.js",
+    "realtime": "./bin/node apps/collaborative-workspace/src/server.js",
+    "start": "./bin/node src/index.js"
+  },
+  "keywords": [
+    "ai",
+    "multi-agent",
+    "virtual-software-house",
+    "sandbox",
+    "budget-guardrails",
+    "human-in-the-loop"
+  ],
+  "author": "Antigravity Pair Programmer",
+  "license": "MIT",
+  "dependencies": {
+    "bullmq": "^6.4.2",
+    "ioredis": "^5.11.1",
+    "ioredis-mock": "^8.13.1",
+    "pg": "^8.23.1",
+    "redis-server": "^1.2.2"
+  },
+  "devDependencies": {
+    "pg-mem": "^3.0.14"
+  }
+}

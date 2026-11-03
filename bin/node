@@ -1,0 +1,15 @@
+#!/bin/bash
+export ELECTRON_RUN_AS_NODE=1
+ELECTRON_BIN="/Applications/Antigravity IDE.app/Contents/MacOS/Electron"
+if [ ! -f "$ELECTRON_BIN" ]; then
+  ELECTRON_BIN="/Volumes/Antigravity IDE/Antigravity IDE.app/Contents/MacOS/Electron"
+fi
+
+if [ -f "$ELECTRON_BIN" ]; then
+  exec "$ELECTRON_BIN" "$@"
+elif command -v node >/dev/null 2>&1; then
+  exec "$(command -v node)" "$@"
+else
+  echo "Error: Electron or Node.js runtime not found." >&2
+  exit 1
+fi

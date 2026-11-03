@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Synapse — AI Virtual Software House</title>
+  <meta name="description" content="Autonomous AI Virtual Software House with interactive animated virtual office, 11 specialized AI employees, sandboxed execution, DAG workflow, and human-in-the-loop governance.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-dark">
+  <!-- Ambient background glow layers -->
+  <div class="ambient-glow glow-cyan"></div>
+  <div class="ambient-glow glow-purple"></div>
+  <div class="ambient-glow glow-blue"></div>
+
+  <!-- Main Application Wrapper -->
+  <div class="company-app">
+
+    <!-- ── TOP GLOBAL NAVIGATION ──────────────────────────────────────── -->
+    <header class="top-navbar glass-card">
+      <div class="nav-left">
+        <div class="brand-cluster" id="btn-brand-home">
+          <div class="brand-emblem">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+            <span class="emblem-core-pulse"></span>
+          </div>
+          <div class="brand-text">
+            <div class="brand-title-row">
+              <span class="brand-name">SYNAPSE</span>
+              <span class="brand-tag">VIRTUAL COMPANY</span>
+            </div>
+            <span class="brand-slogan">AI Virtual Software House &middot; Autonomous Multi-Agent Org</span>
+          </div>
+        </div>
+
+        <!-- Global Navigation Items -->
+        <nav class="nav-links-menu" id="primary-nav">
+          <button class="nav-item active" data-view="office" id="nav-office">
+            <span class="nav-icon">🏢</span>
+            <span class="nav-label">Virtual Office</span>
+          </button>
+          <button class="nav-item" data-view="idea" id="nav-idea">
+            <span class="nav-icon">💡</span>
+            <span class="nav-label">Idea Studio</span>
+          </button>
+          <button class="nav-item" data-view="build" id="nav-build">
+            <span class="nav-icon">🛠️</span>
+            <span class="nav-label">Build Studio</span>
+          </button>
+          <button class="nav-item" data-view="tasks" id="nav-tasks">
+            <span class="nav-icon">📋</span>
+            <span class="nav-label">Task Board</span>
+          </button>
+          <button class="nav-item" data-view="team" id="nav-team">
+            <span class="nav-icon">👥</span>
+            <span class="nav-label">Team & Agents</span>
+          </button>
+          <button class="nav-item" data-view="projects" id="nav-projects">
+            <span class="nav-icon">📦</span>
+            <span class="nav-label">Projects</span>
+          </button>
+          <button class="nav-item" data-view="approvals" id="nav-approvals">
+            <span class="nav-icon">🛡️</span>
+            <span class="nav-label">Approvals</span>
+            <span class="nav-badge" id="nav-approval-badge" style="display:none">1</span>
+          </button>
+          <button class="nav-item" data-view="logs" id="nav-logs">
+            <span class="nav-icon">📡</span>
+            <span class="nav-label">Logs</span>
+          </button>
+          <button class="nav-item" data-view="settings" id="nav-settings">
+            <span class="nav-icon">⚙️</span>
+            <span class="nav-label">Settings</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Right Controls & Status Indicators -->
+      <div class="nav-right">
+        <!-- Live Execution vs Demo Mode Switcher -->
+        <div class="mode-toggle-group" title="Toggle between live backend execution and guided demo simulation">
+          <button class="mode-pill active" id="btn-mode-live">
+            <span class="status-dot dot-live"></span>LIVE BACKEND
+          </button>
+          <button class="mode-pill" id="btn-mode-demo">
+            <span class="status-dot dot-demo"></span>DEMO SIM
+          </button>
+        </div>
+
+        <!-- Audio mute/unmute -->
+        <button class="icon-btn" id="btn-toggle-sound" title="Toggle synthesized spatial office sound effects">
+          <svg id="icon-sound-on" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+          </svg>
+          <svg id="icon-sound-off" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
+        </button>
+
+        <!-- Primary Action: Autonomous Build Project -->
+        <button class="btn btn-primary btn-sm btn-build-glow" id="btn-open-build-modal" title="Autonomous Idea-to-Working-Software Builder">
+          <span class="btn-rocket">🚀</span>
+          <strong>Build Project</strong>
+        </button>
+      </div>
+    </header>
+
+    <!-- Global Floating Activity Toast Overlay -->
+    <div class="canvas-floating-toast" id="canvas-toast" style="display:none">
+      <span class="toast-icon">⚡</span>
+      <span class="toast-text" id="canvas-toast-msg">Sofia Ramos dispatched task to David Chen</span>
+    </div>
+
+    <!-- ── CONTENT VIEW CONTAINER ──────────────────────────────────────── -->
+    <main class="main-content" id="main-view-container">
+
+      <!-- ===================================================================
+           VIEW 1: ANIMATED VIRTUAL OFFICE (PRIMARY EXPERIENCE)
+           =================================================================== -->
+      <section class="view-panel active" id="view-office">
+        <div class="office-wrapper">
+
+          <!-- Office HUD / Control Ribbon -->
+          <div class="office-toolbar glass-card">
+            <!-- Left: Active Project & Status -->
+            <div class="office-meta-bar">
+              <div class="project-pill" id="office-project-pill" title="Click to inspect project details">
+                <span class="project-icon">🚀</span>
+                <span class="project-name" id="office-project-name">Nexus Cloud Store Engine</span>
+                <span class="stage-tag" id="office-stage-tag">STAGE: IDLE</span>
+              </div>
+              <div class="kpi-ticker-pill">
+                <span class="ticker-label">Token Burn:</span>
+                <span class="ticker-val" id="office-token-stat">0 / 125,000</span>
+                <div class="mini-progress-track"><div class="mini-progress-fill" id="office-token-progress" style="width: 0%"></div></div>
+              </div>
+            </div>
+
+            <!-- Center: Department Quick Camera Jumps -->
+            <div class="dept-quick-jumps" id="dept-shortcuts" title="Click to navigate camera to any department">
+              <button class="dept-chip active" data-dept="all">🌐 Full Office</button>
+              <button class="dept-chip" data-dept="ceo_cabin">👔 CEO Cabin</button>
+              <button class="dept-chip" data-dept="pm_area">📊 PM Area</button>
+              <button class="dept-chip" data-dept="meeting_room">🤝 Meeting Room</button>
+              <button class="dept-chip" data-dept="ui_ux">🎨 UI/UX</button>
+              <button class="dept-chip" data-dept="frontend">💻 Frontend</button>
+              <button class="dept-chip" data-dept="backend">⚙️ Backend</button>
+              <button class="dept-chip" data-dept="db_eng">🗄️ Database</button>
+              <button class="dept-chip" data-dept="ai_ml">🧠 AI/ML Lab</button>
+              <button class="dept-chip" data-dept="code_review">🔍 Review Station</button>
+              <button class="dept-chip" data-dept="qa_lab">🧪 QA Rig</button>
+              <button class="dept-chip" data-dept="devops_hub">🚀 DevOps</button>
+              <button class="dept-chip" data-dept="delivery_dock">📦 Delivery</button>
+            </div>
+
+            <!-- Right: Camera Controls -->
+            <div class="camera-controls">
+              <button class="cam-btn" id="btn-cam-zoom-out" title="Zoom Out (-)">−</button>
+              <span class="zoom-display" id="cam-zoom-level">100%</span>
+              <button class="cam-btn" id="btn-cam-zoom-in" title="Zoom In (+)">+</button>
+              <button class="cam-btn" id="btn-cam-reset" title="Reset Camera View">⟲ Reset</button>
+            </div>
+          </div>
+
+          <!-- Autonomous Workflow Progression & Pipeline Controls Strip -->
+          <div class="workflow-header-strip glass-card" id="office-workflow-ribbon">
+            <div class="stage-stepper-wrap">
+              <span class="stepper-title">LIFECYCLE STAGE:</span>
+              <div class="stage-stepper-bar" id="office-stage-stepper">
+                <div class="step-node active" id="step-STAGE_INTAKE" data-step="STAGE_INTAKE" title="Phase 1: PM & BA synthesize PRD and acceptance criteria">
+                  <span class="step-num">1</span>
+                  <span class="step-label">Planning</span>
+                </div>
+                <span class="step-divider">›</span>
+                <div class="step-node" id="step-STAGE_ARCHITECTURE" data-step="STAGE_ARCHITECTURE" title="Phase 2: Architect creates ADR-001 and API contracts">
+                  <span class="step-num">2</span>
+                  <span class="step-label">Architecture</span>
+                </div>
+                <span class="step-divider">›</span>
+                <div class="step-node" id="step-STAGE_TASKS" data-step="STAGE_TASKS" title="Phase 3: Work divided into executable tasks in SQLite">
+                  <span class="step-num">3</span>
+                  <span class="step-label">Distribution</span>
+                </div>
+                <span class="step-divider">›</span>
+                <div class="step-node" id="step-STAGE_DEV" data-step="STAGE_DEV" title="Phase 4: Concurrent Frontend & Backend code generation">
+                  <span class="step-num">4</span>
+                  <span class="step-label">Design & Dev</span>
+                </div>
+                <span class="step-divider">›</span>
+                <div class="step-node" id="step-STAGE_REVIEW" data-step="STAGE_REVIEW" title="Phase 5: Static code review and security audits">
+                  <span class="step-num">5</span>
+                  <span class="step-label">Code Review</span>
+                </div>
+                <span class="step-divider">›</span>
+                <div class="step-node" id="step-STAGE_QA" data-step="STAGE_QA" title="Phase 6: Sandboxed node:test execution with self-healing">
+                  <span class="step-num">6</span>
+                  <span class="step-label">Testing & Fixes</span>
+                </div>
+                <span class="step-divider">›</span>
+                <div class="step-node" id="step-STAGE_BUILD" data-step="STAGE_BUILD" title="Phase 7: DevOps packaging and Git release commits">
+                  <span class="step-num">7</span>
+                  <span class="step-label">Build</span>
+                </div>
+                <span class="step-divider">›</span>
+                <div class="step-node" id="step-STAGE_PREVIEW" data-step="STAGE_PREVIEW" title="Phase 8: Runnable preview compiled and ready">
+                  <span class="step-num">8</span>
+                  <span class="step-label">Preview Ready</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pipeline Live Controls -->
+            <div class="pipeline-controls-group">
+              <button class="pipe-ctrl-btn" id="btn-pipeline-pause" title="Pause Execution">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+                <span>Pause</span>
+              </button>
+              <button class="pipe-ctrl-btn" id="btn-pipeline-resume" title="Resume Execution" style="display:none">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                <span>Resume</span>
+              </button>
+              <button class="pipe-ctrl-btn" id="btn-pipeline-cancel" title="Cancel Execution">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                <span>Cancel</span>
+              </button>
+              <button class="pipe-ctrl-btn" id="btn-pipeline-retry" title="Re-Run / Retry Autonomous Build">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+                <span>Retry</span>
+              </button>
+              <button class="pipe-ctrl-btn pipe-ctrl-action" id="btn-open-live-preview" title="View Live Generated Application in Build Studio">
+                <span class="pulse-dot active"></span>
+                <span>Open Preview</span>
+              </button>
+              <button class="pipe-ctrl-btn" id="btn-open-coverage-ribbon" title="Audit Matrix & Requirement Coverage">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                <span>Audit Matrix</span>
+              </button>
+              <button class="pipe-ctrl-btn btn-export-zip" id="btn-export-project-zip-header" title="Download Complete Project (.ZIP Archive with Dockerfile for Cloud/Local)">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <span>Export ZIP</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- One-Click Autonomous Project Launcher Bar (HIGH-VISIBILITY DEDICATED BAR) -->
+          <div class="quick-build-launcher-bar glass-card" id="office-quick-build-bar">
+            <div class="quick-build-input-group">
+              <span class="quick-build-label">
+                <span class="pulse-dot active"></span>
+                <span>BUILD A PROJECT:</span>
+              </span>
+              <input type="text" id="quick-build-title-input" class="quick-build-title-input" placeholder="Project Name (e.g. AI Travel Planner, E-Commerce Store, Telemetry Dashboard)..." value="" />
+              <input type="text" id="quick-build-desc-input" class="quick-build-desc-input" placeholder="Requirements & Features (e.g. User auth, SQLite DB, REST API, responsive UI)..." value="" />
+              <button class="btn btn-primary btn-sm btn-build-action btn-build-glow" id="btn-quick-build-execute" title="Launch Autonomous Build with 11 Specialists">
+                <span class="btn-rocket">🚀</span>
+                <strong>Build Project</strong>
+              </button>
+            </div>
+            <!-- Quick Preset Chips -->
+            <div class="quick-build-presets-row">
+              <span class="quick-preset-hint">Quick Templates:</span>
+              <button type="button" class="quick-preset-btn" data-title="Smart E-Commerce Platform" data-desc="Build an e-commerce website with login, products, cart, payments, admin dashboard, and order tracking.">🛒 E-Commerce Platform</button>
+              <button type="button" class="quick-preset-btn" data-title="Real-Time Collaborative Network" data-desc="Multi-channel chat engine with user presence, channel history, and WebSocket/SSE sync.">💬 Real-Time Chat</button>
+              <button type="button" class="quick-preset-btn" data-title="Zero-Trust Identity Gateway" data-desc="Enterprise auth gateway with JWT verification, password hashing, and role-based access control.">🔐 Auth Gateway</button>
+              <button type="button" class="quick-preset-btn" data-title="Cloud Telemetry & Metrics Studio" data-desc="Real-time analytics dashboard with metric streaming, charts, and alert threshold notifications.">📊 Analytics Dashboard</button>
+              <button type="button" class="quick-preset-btn" data-title="Interactive Kanban Task Board" data-desc="Kanban project board with drag-and-drop tasks, swimlanes, column filters, and persistent state.">📋 Kanban Board</button>
+            </div>
+          </div>
+
+          <!-- THE LIVING VIRTUAL OFFICE CANVAS -->
+          <div class="office-canvas-viewport" id="office-viewport">
+            <canvas id="office-canvas"></canvas>
+
+            <!-- Floating Quick Preview Trigger -->
+            <div class="canvas-preview-trigger" id="btn-quick-preview-floating">
+              <button class="floating-pill-btn">
+                <span class="pulse-dot active"></span>
+                <span>Live App Preview</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Bottom Office Command & Status Strip -->
+          <div class="office-bottom-strip glass-card">
+            <!-- Compact Natural Language Command Input -->
+            <div class="command-bar-wrap">
+              <div class="command-symbol">✨</div>
+              <input type="text" id="office-command-input" class="command-input" placeholder="Direct Agent Instruction: 'Ask Sofia for PRD status', 'Tell David to optimize DB queries'..." />
+              <button class="btn btn-primary btn-sm" id="btn-office-command-send">
+                <span>Dispatch</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+              </button>
+            </div>
+
+            <!-- Collapsible Live Deliberation / Telemetry Ticker -->
+            <div class="office-live-ticker" id="office-deliberation-ticker">
+              <span class="ticker-badge"><span class="blink">●</span> LIVE THOUGHT</span>
+              <span class="ticker-content" id="ticker-thought-text">Sofia Ramos: "Analyzing requirement scope for e-commerce checkout flow..."</span>
+            </div>
+          </div>
+
+          <!-- Slide-Over Employee Detail Drawer -->
+          <aside class="employee-drawer glass-card" id="employee-drawer">
+            <div class="drawer-header">
+              <div class="drawer-avatar-wrap">
+                <div class="drawer-avatar" id="drawer-avatar">PM</div>
+                <div class="drawer-status-dot" id="drawer-status-dot"></div>
+              </div>
+              <div class="drawer-identity">
+                <h3 class="drawer-name" id="drawer-name">Sofia Ramos</h3>
+                <span class="drawer-title" id="drawer-title">Lead Product Manager / Orchestrator</span>
+                <span class="drawer-dept-tag" id="drawer-dept">Project Management</span>
+              </div>
+              <button class="drawer-close-btn" id="btn-close-drawer">&times;</button>
+            </div>
+
+            <div class="drawer-body">
+              <!-- Current Assignment -->
+              <div class="drawer-section">
+                <div class="drawer-section-title">CURRENT ASSIGNMENT</div>
+                <div class="assignment-card">
+                  <div class="assignment-header">
+                    <span class="assignment-task" id="drawer-task">Deconstructing PRD & Milestone DAG</span>
+                    <span class="assignment-badge" id="drawer-status-badge">WORKING</span>
+                  </div>
+                  <div class="assignment-progress-row">
+                    <div class="progress-bar-track">
+                      <div class="progress-bar-fill" id="drawer-progress-fill" style="width: 75%"></div>
+                    </div>
+                    <span class="progress-val" id="drawer-progress-text">75%</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Skills & Responsibilities -->
+              <div class="drawer-section">
+                <div class="drawer-section-title">CORE SKILLS & RESPONSIBILITIES</div>
+                <div class="skills-tag-cloud" id="drawer-skills">
+                  <span class="skill-tag">Roadmaps</span>
+                  <span class="skill-tag">PRD Synthesis</span>
+                  <span class="skill-tag">DAG Scheduling</span>
+                  <span class="skill-tag">Token Allocation</span>
+                </div>
+              </div>
+
+              <!-- Recent Deliberations / Thoughts -->
+              <div class="drawer-section">
+                <div class="drawer-section-title">RECENT DELIBERATION STREAM</div>
+                <div class="drawer-thought-stream" id="drawer-thoughts">
+                  <div class="drawer-thought-item">
+                    <span class="thought-time">Just now</span>
+                    <p class="thought-msg">"Mapping tasks: Design -> Frontend -> Backend -> QA -> DevOps."</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="drawer-footer">
+              <button class="btn btn-outline btn-sm" id="btn-drawer-focus-cam">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19 12a7 7 0 0 0-7-7M5 12a7 7 0 0 0 7 7"></path></svg>
+                Focus Camera
+              </button>
+              <button class="btn btn-primary btn-sm" id="btn-drawer-ping-agent">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                Ping Agent
+              </button>
+            </div>
+          </aside>
+
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           VIEW 2: IDEA STUDIO (CONVERSATIONAL INTAKE & DECOMPOSITION)
+           =================================================================== -->
+      <section class="view-panel" id="view-idea">
+        <div class="idea-studio-layout">
+          <!-- Left: Conversational Prompt Panel -->
+          <div class="glass-card idea-input-card">
+            <div class="section-badge"><span class="badge-dot"></span>NATURAL LANGUAGE INTAKE</div>
+            <h2 class="section-title">Idea Studio</h2>
+            <p class="section-desc">Describe your application in plain natural language. The 11 AI employees will analyze requirements, ask essential clarifying questions, and deconstruct tasks into an executable DAG.</p>
+
+            <div class="idea-presets">
+              <span class="presets-label">Quick Prompts:</span>
+              <button class="preset-btn" data-prompt="Build a responsive e-commerce web app with product listings, cart, stripe checkout, and admin dashboard.">🛒 Full E-Commerce Platform</button>
+              <button class="preset-btn" data-prompt="Build a real-time collaborative chat application with multi-channel messaging, user presence, and persistent SQLite WAL storage.">💬 Real-Time Chat Engine</button>
+              <button class="preset-btn" data-prompt="Build an enterprise identity and authentication gateway with JWT token verification, password hashing, and role-based access control.">🔐 Zero-Trust Auth Gateway</button>
+            </div>
+
+            <div class="idea-textarea-wrap">
+              <textarea id="idea-prompt-text" class="idea-textarea" rows="5" placeholder="e.g. Build a modern responsive microservices web store with customer authentication, product catalog, cart checkout, and automated tests..."></textarea>
+            </div>
+
+            <div class="idea-actions">
+              <button class="btn btn-secondary" id="btn-clear-idea">Clear</button>
+              <button class="btn btn-primary" id="btn-analyze-idea">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                Analyze & Decompose Plan
+              </button>
+            </div>
+          </div>
+
+          <!-- Right: PRD & Task Breakdown Synthesis -->
+          <div class="glass-card idea-output-card" id="idea-output-card">
+            <div class="plan-header">
+              <div>
+                <h3 class="plan-title" id="plan-title">Project Decomposition Blueprint</h3>
+                <span class="plan-sub" id="plan-sub">Submit an idea on the left to generate the autonomous multi-agent plan</span>
+              </div>
+              <button class="btn btn-success btn-sm" id="btn-launch-plan-execution" style="display:none">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Approve & Execute Plan
+              </button>
+            </div>
+
+            <div class="plan-content" id="plan-content">
+              <div class="plan-empty-state">
+                <div class="empty-icon">💡</div>
+                <h4>Ready for your next breakthrough software idea</h4>
+                <p>Type or click a preset on the left to see Sofia (PM) and Elena (BA) formulate the product specification document and task dependency tree.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           VIEW 3: BUILD STUDIO (LIVE BROWSER PREVIEW & CODE BUILDER)
+           =================================================================== -->
+      <section class="view-panel" id="view-build">
+        <!-- Studio Master Control Strip -->
+        <div class="build-studio-toolbar glass-card">
+          <div class="studio-meta">
+            <span class="studio-badge" id="build-project-badge">ACTIVE PROJECT</span>
+            <h2 class="studio-project-title" id="build-project-name">Nexus Cloud Store Engine</h2>
+            <span class="studio-runtime-tag" id="preview-framework-tag">Interactive SPA</span>
+            <span class="studio-agent-update" id="preview-agent-activity">● Updated by Frontend Lead</span>
+          </div>
+
+          <div class="studio-layout-controls">
+            <div class="layout-btn-group">
+              <button class="layout-btn" id="btn-layout-code-only" title="Code Editor Only">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+                Code Only
+              </button>
+              <button class="layout-btn active" id="btn-layout-split" title="Code + Browser Preview Split">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="12" y1="3" x2="12" y2="21"></line></svg>
+                Code + Preview
+              </button>
+              <button class="layout-btn" id="btn-layout-preview-only" title="Live Preview Only">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+                Preview Only
+              </button>
+              <button class="layout-btn" id="btn-layout-fullscreen" title="Full-Screen Browser Viewport">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                Full View
+              </button>
+            </div>
+
+            <button class="btn btn-primary btn-xs" id="btn-studio-run-pipeline">⚡ Re-Synthesize</button>
+            <button class="btn btn-outline btn-xs" id="btn-export-code-bundle">📦 Export Bundle</button>
+          </div>
+        </div>
+
+        <!-- Requirement-Accurate Feature Builder Strip -->
+        <div class="build-feature-control-bar glass-card">
+          <div class="feature-input-group">
+            <span class="feature-prompt-icon">🎯</span>
+            <input type="text" class="feature-instruction-input" id="input-feature-instruction" 
+              placeholder="Describe the feature or instruction to build (e.g. User Authentication, Order Checkout, Real-time Dashboard)..." 
+              value="" />
+            <button class="btn btn-secondary btn-sm" id="btn-inspect-requirements" title="Parse and lock requirements before modifying files">
+              🔍 Inspect Scope
+            </button>
+            <button class="btn btn-primary btn-sm btn-build-feature-glow" id="btn-run-feature-build" title="Synthesize feature, run browser test, audit and auto-fix">
+              ⚡ Build & Self-Audit
+            </button>
+          </div>
+          <div class="feature-status-summary">
+            <span class="feature-lock-tag" id="feature-lock-tag">LOCKED TO REQUEST</span>
+            <button class="btn btn-outline btn-xs" id="btn-open-audit-modal">📋 Full Audit Report</button>
+          </div>
+        </div>
+
+        <!-- 3-Column Split Container with Draggable Resizers -->
+        <div class="build-split-container" id="build-split-container">
+          <!-- PANEL 1: File Explorer -->
+          <div class="glass-card build-panel-explorer" id="build-panel-explorer">
+            <div class="explorer-header">
+              <span class="panel-heading">PROJECT EXPLORER</span>
+              <div class="explorer-actions">
+                <button class="icon-btn-tiny" id="btn-new-file" title="Create New File">＋</button>
+                <button class="icon-btn-tiny" id="btn-refresh-files" title="Refresh Workspace Tree">🔄</button>
+              </div>
+            </div>
+            <div class="explorer-tree" id="build-file-tree">
+              <!-- Populated dynamically -->
+            </div>
+            <div class="explorer-footer">
+              <span class="file-count-label" id="explorer-file-count">0 files</span>
+              <span class="sandbox-tag">SANDBOX JAILED</span>
+            </div>
+          </div>
+
+          <!-- RESIZER 1 -->
+          <div class="build-resizer" id="build-resizer-left" title="Drag to resize File Explorer"></div>
+
+          <!-- PANEL 2: Code Editor & Testing Tools -->
+          <div class="glass-card build-panel-editor" id="build-panel-editor">
+            <div class="panel-tab-bar">
+              <div class="tab-pill active" data-build-tab="code">📁 Code Editor</div>
+              <div class="tab-pill" data-build-tab="audit">🎯 Requirement Lock & Audit</div>
+              <div class="tab-pill" data-build-tab="tests">🧪 Test Suite</div>
+              <div class="tab-pill" data-build-tab="terminal">💻 Sandbox Terminal</div>
+              <div class="tab-pill" data-build-tab="git">📦 Git Commits</div>
+              <div class="tab-pill" data-build-tab="logs">📋 Preview Logs</div>
+            </div>
+
+            <!-- Subtab 1: Code Editor -->
+            <div class="build-subtab active" id="build-subtab-code">
+              <!-- Open Files Tab Bar -->
+              <div class="editor-tabs-bar" id="editor-tabs-bar">
+                <div class="file-chips" id="build-file-chips"></div>
+              </div>
+
+              <!-- Editor Action Bar -->
+              <div class="code-editor-header">
+                <div class="editor-file-info">
+                  <span class="file-icon" id="editor-file-icon">📄</span>
+                  <span class="active-filename" id="build-active-filename">src/api.js</span>
+                  <span class="unsaved-dot hidden" id="editor-unsaved-dot" title="Unsaved changes">●</span>
+                </div>
+                <div class="editor-controls">
+                  <button class="btn btn-primary btn-xs" id="btn-save-code-editor" title="Save file and hot reload preview (Ctrl/Cmd+S)">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                    Save & Hot Reload
+                  </button>
+                  <button class="icon-btn-sm" id="btn-copy-code" title="Copy code to clipboard">📋</button>
+                  <span class="file-jail-badge">ISOLATED JAIL</span>
+                </div>
+              </div>
+
+              <!-- Editor Work Area with Line Numbers & Editable Input -->
+              <div class="editor-main-area">
+                <div class="line-numbers" id="code-line-numbers">1</div>
+                <textarea class="code-editor-textarea" id="build-code-textarea" spellcheck="false" placeholder="// Select a file from the explorer to inspect or edit..."></textarea>
+              </div>
+            </div>
+
+            <!-- Subtab: Requirement Lock & 12-Dimension Self-Auditing Dashboard -->
+            <div class="build-subtab" id="build-subtab-audit">
+              <!-- Audit Top Header -->
+              <div class="audit-subtab-header">
+                <div class="audit-meta-wrap">
+                  <div class="audit-pill-group">
+                    <span class="audit-scope-pill" id="audit-scope-pill">🔒 REQUIREMENT LOCKED</span>
+                    <span class="audit-domain-badge" id="audit-domain-badge">DOMAIN: AUTH</span>
+                    <span class="audit-run-id-tag" id="audit-run-id-tag">RUN: #none</span>
+                  </div>
+                  <h3 class="audit-feature-title" id="audit-feature-title">Requested Feature: Login & Signup Authentication</h3>
+                  <p class="audit-instruction-quote" id="audit-instruction-quote">"Build a Login and Signup page."</p>
+                </div>
+                <div class="audit-header-actions">
+                  <span class="audit-final-status-badge status-idle" id="audit-final-status-badge">NOT RUN YET</span>
+                  <button class="btn btn-primary btn-xs" id="btn-rerun-audit-pipeline">⚡ Run Audit Loop</button>
+                </div>
+              </div>
+
+              <!-- Scope Lock & Explicit Exclusions Grid -->
+              <div class="audit-scope-grid">
+                <div class="scope-card scope-card-allowed">
+                  <div class="scope-card-title">
+                    <span class="scope-icon">✔</span>
+                    <h4>EXPLICIT REQUIREMENTS (MUST BUILD)</h4>
+                  </div>
+                  <div class="scope-list" id="audit-req-list">
+                    <div class="scope-item"><span>REQ-AUTH-01</span> Login form with email and password fields</div>
+                    <div class="scope-item"><span>REQ-AUTH-02</span> Signup registration form with validation</div>
+                    <div class="scope-item"><span>REQ-AUTH-03</span> Email & password client validation</div>
+                    <div class="scope-item"><span>REQ-AUTH-04</span> Password visibility toggle button</div>
+                    <div class="scope-item"><span>REQ-AUTH-05</span> Accessible alerts & error/loading states</div>
+                    <div class="scope-item"><span>REQ-AUTH-06</span> Navigation toggle between Login and Signup</div>
+                    <div class="scope-item"><span>REQ-AUTH-07</span> Authentication backend integration (scrypt hashing)</div>
+                    <div class="scope-item"><span>REQ-AUTH-08</span> Session token issuance & post-login view</div>
+                    <div class="scope-item"><span>REQ-AUTH-09</span> Responsive glassmorphic layout</div>
+                    <div class="scope-item"><span>REQ-AUTH-10</span> Unit test suite verifying registration & login</div>
+                  </div>
+                </div>
+
+                <div class="scope-card scope-card-prohibited">
+                  <div class="scope-card-title">
+                    <span class="scope-icon">🚫</span>
+                    <h4>EXPLICIT EXCLUSIONS (PROHIBITED & REJECTED)</h4>
+                  </div>
+                  <div class="scope-list" id="audit-excl-list">
+                    <div class="scope-item prohibited"><span>EXCL-1</span> 🚫 Shopping cart UI is strictly prohibited</div>
+                    <div class="scope-item prohibited"><span>EXCL-2</span> 🚫 Checkout and Stripe payment flows are prohibited</div>
+                    <div class="scope-item prohibited"><span>EXCL-3</span> 🚫 Product catalog and inventory pages are prohibited</div>
+                    <div class="scope-item prohibited"><span>EXCL-4</span> 🚫 Payment processing or order confirmation prohibited</div>
+                    <div class="scope-item prohibited"><span>EXCL-5</span> 🚫 Overwriting unrelated workspace files prohibited</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 12-Dimension Verification Dashboard Grid -->
+              <div class="audit-verification-section">
+                <div class="section-sub-header">
+                  <div>
+                    <h4 class="sub-heading">HONEST 12-DIMENSION VERIFICATION MATRIX</h4>
+                    <p class="sub-explain">Zero errors standard: Every dimension is independently checked. No fake passes or skipped tests.</p>
+                  </div>
+                  <div class="audit-counter-badge" id="audit-verification-counter">0 / 12 Verified</div>
+                </div>
+
+                <div class="verification-matrix-grid" id="audit-verification-grid">
+                  <div class="v-card" id="vcard-requirements">
+                    <div class="v-card-top">
+                      <span class="v-name">1. Requirements</span>
+                      <span class="v-pill pill-idle" id="vpill-requirements">Pending</span>
+                    </div>
+                    <div class="v-detail" id="vdetail-requirements">Checks locked acceptance criteria</div>
+                  </div>
+
+                  <div class="v-card" id="vcard-lint">
+                    <div class="v-card-top">
+                      <span class="v-name">2. Linter</span>
+                      <span class="v-pill pill-idle" id="vpill-lint">Pending</span>
+                    </div>
+                    <div class="v-detail" id="vdetail-lint">ESLint / syntax validation</div>
+                  </div>
+
+                  <div class="v-card" id="vcard-typecheck">
+                    <div class="v-card-top">
+                      <span class="v-name">3. Type Check</span>
+                      <span class="v-pill pill-idle" id="vpill-typecheck">Pending</span>
+                    </div>
+                    <div class="v-detail" id="vdetail-typecheck">Static type & contract checks</div>
+                  </div>
+
+                  <div class="v-card" id="vcard-build">
+                    <div class="v-card-top">
+                      <span class="v-name">4. Prod Build</span>
+                      <span class="v-pill pill-idle" id="vpill-build">Pending</span>
+                    </div>
+                    <div class="v-detail" id="vdetail-build">Asset compilation & bundling</div>
+                  </div>
+
+                  <div class="v-card" id="vcard-unit">
+                    <div class="v-card-top">
+                      <span class="v-name">5. Unit Tests</span>
+                      <span class="v-pill pill-idle" id="vpill-unit">Pending</span>
+                    </div>
+                    <div class="v-detail" id="vdetail-unit">node:test suite execution</div>
+                  </div>
+
+                  <div class="v-card" id="vcard-integration">
+                    <div class="v-card-top">
+                      <span class="v-name">6. Integration</span>
+                      <span class="v-pill pill-idle" id="vpill-integration">Pending</span>
+                    </div>
+                    <div class="v-detail" id="vdetail-integration">API & database contract checks</div>
+                  </div>
+
+                  <div class="v-card" id="vcard-browser">
+                    <div class="v-card-top">
+                      <span class="v-name">7. Browser Tests</span>
+                      <span class="v-pill pill-idle" id="vpill-browser">Pending</span>
+                    </div>
+                    <div class="v-detail" id="vdetail-browser">Live preview DOM & route assertions</div>
+                  </div>
+
+                  <div class="v-card" id="vcard-console">
+                    <div class="v-card-top">
+                      <span class="v-name">8. Runtime Console</span>
+                      <span class="v-pill pill-idle" id="vpill-console">Pending</span>
+                    </div>
+                    <div class="v-detail" id="vdetail-console">Zero unhandled browser errors</div>
+                  </div>
+
+                  <div class="v-card" id="vcard-network">
+                    <div class="v-card-top">
+                      <span class="v-name">9. Network Requests</span>
+                      <span class="v-pill pill-idle" id="vpill-network">Pending</span>
+                    </div>
+                    <div class="v-detail" id="vdetail-network">Zero 4xx/5xx network failures</div>
+                  </div>
+
+                  <div class="v-card" id="vcard-security">
+                    <div class="v-card-top">
+                      <span class="v-name">10. Security</span>
+                      <span class="v-pill pill-idle" id="vpill-security">Pending</span>
+                    </div>
+                    <div class="v-detail" id="vdetail-security">Sandbox jail, secrets & sanitization</div>
+                  </div>
+
+                  <div class="v-card" id="vcard-regression">
+                    <div class="v-card-top">
+                      <span class="v-name">11. Regression</span>
+                      <span class="v-pill pill-idle" id="vpill-regression">Pending</span>
+                    </div>
+                    <div class="v-detail" id="vdetail-regression">Zero broken pre-existing routes</div>
+                  </div>
+
+                  <div class="v-card" id="vcard-preview">
+                    <div class="v-card-top">
+                      <span class="v-name">12. Preview Health</span>
+                      <span class="v-pill pill-idle" id="vpill-preview">Pending</span>
+                    </div>
+                    <div class="v-detail" id="vdetail-preview">Live preview HTTP 200 health check</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Real Browser Verification Results -->
+              <div class="audit-browser-section">
+                <div class="section-sub-header">
+                  <div>
+                    <h4 class="sub-heading">REAL BROWSER AUTOMATION VERIFICATION</h4>
+                    <p class="sub-explain">Automated verification against running preview server on localhost.</p>
+                  </div>
+                  <span class="test-status-badge status-pass" id="audit-browser-badge">READY</span>
+                </div>
+                <div class="browser-evidence-box">
+                  <div class="evidence-row">
+                    <span class="evidence-label">Preview URL:</span>
+                    <code class="evidence-code" id="audit-browser-target-url">/preview/</code>
+                  </div>
+                  <div class="evidence-assertions-list" id="audit-browser-assertions-list">
+                    <div class="assertion-item pass"><span class="check-icon">✔</span> HTTP 200 OK from live preview server</div>
+                    <div class="assertion-item pass"><span class="check-icon">✔</span> Authentication UI form elements loaded</div>
+                    <div class="assertion-item pass"><span class="check-icon">✔</span> Password visibility toggle operational</div>
+                    <div class="assertion-item pass"><span class="check-icon">✔</span> ASSERT-NO-ROGUE-CART: Zero cart/checkout elements in preview</div>
+                    <div class="assertion-item pass"><span class="check-icon">✔</span> Script sandbox runtime clean (0 console errors)</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Self-Auditing Loop Log & Error History -->
+              <div class="audit-loop-section">
+                <div class="section-sub-header">
+                  <div>
+                    <h4 class="sub-heading">SELF-AUDITING AUDIT → FIX → RETEST HISTORY</h4>
+                    <p class="sub-explain">Autonomous patch loop records findings, root cause analysis, and fixes.</p>
+                  </div>
+                  <span class="audit-iteration-tag" id="audit-iteration-tag">Iteration 0</span>
+                </div>
+                <div class="audit-error-history-table-wrap">
+                  <table class="audit-table" id="audit-error-table">
+                    <thead>
+                      <tr>
+                        <th>Error ID</th>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>Root Cause</th>
+                        <th>Fix Attempted</th>
+                        <th>Retest</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id="audit-error-tbody">
+                      <tr>
+                        <td colspan="7" class="empty-audit-row">No errors found. System is in verified state.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Traceability Matrix Section -->
+              <div class="audit-traceability-section">
+                <div class="section-sub-header">
+                  <div>
+                    <h4 class="sub-heading">REQUIREMENT TRACEABILITY MATRIX</h4>
+                    <p class="sub-explain">Every requirement is linked to implementation files, tests, and acceptance status.</p>
+                  </div>
+                </div>
+                <div class="audit-traceability-table-wrap">
+                  <table class="audit-table" id="audit-traceability-table">
+                    <thead>
+                      <tr>
+                        <th>Req ID</th>
+                        <th>Requirement</th>
+                        <th>Implementation Files</th>
+                        <th>Test Files</th>
+                        <th>Browser Check</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id="audit-traceability-tbody">
+                      <!-- Populated dynamically -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Subtab 2: Test Suite -->
+            <div class="build-subtab" id="build-subtab-tests">
+              <div class="test-suite-header">
+                <div class="test-suite-title">
+                  <span class="test-status-badge status-pass" id="build-test-status-badge">TESTS PASSING</span>
+                  <span class="test-sub-label">Sandboxed node:test execution</span>
+                </div>
+                <button class="btn btn-primary btn-xs" id="btn-build-rerun-tests">🧪 Re-run Tests Now</button>
+              </div>
+              <div class="test-stats-cards">
+                <div class="test-stat-card"><span class="stat-number" id="test-stat-total">100%</span><span class="stat-name">Pass Rate</span></div>
+                <div class="test-stat-card"><span class="stat-number" id="test-stat-healing">0</span><span class="stat-name">Heal Patches</span></div>
+                <div class="test-stat-card"><span class="stat-number" id="test-stat-exit">0</span><span class="stat-name">Exit Code</span></div>
+              </div>
+              <pre class="code-editor-pane" id="build-test-output"><code>✔ All automated tests passed in sandbox jail (Exit 0).</code></pre>
+            </div>
+
+            <!-- Subtab 3: Sandbox Terminal -->
+            <div class="build-subtab" id="build-subtab-terminal">
+              <div class="terminal-runner-row">
+                <span class="prompt-sym">$</span>
+                <input type="text" class="cmd-input" id="build-terminal-cmd" value="node --test" placeholder="Run command in workspace jail (e.g. node --test)" />
+                <button class="btn btn-primary btn-xs" id="btn-run-sandbox-cmd">Run</button>
+              </div>
+              <div class="terminal-pane" id="build-terminal-output">
+                <div class="term-line system">[SANDBOX] Execution jail ready. Memory and command blacklists active.</div>
+              </div>
+            </div>
+
+            <!-- Subtab 4: Git Commits -->
+            <div class="build-subtab" id="build-subtab-git">
+              <div class="git-timeline" id="build-git-timeline"></div>
+            </div>
+
+            <!-- Subtab 5: Live Preview Logs -->
+            <div class="build-subtab" id="build-subtab-logs">
+              <div class="terminal-runner-row">
+                <span class="bar-title">PREVIEW SERVER EXECUTION LOGS</span>
+                <button class="btn btn-secondary btn-xs" id="btn-refresh-preview-logs">🔄 Refresh</button>
+              </div>
+              <div class="terminal-pane" id="preview-logs-output">
+                <div class="term-line system">[PREVIEW] Session initialized. Ready.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RESIZER 2 -->
+          <div class="build-resizer" id="build-resizer-right" title="Drag to resize Live Preview"></div>
+
+          <!-- PANEL 3: Live Embedded Browser Preview -->
+          <div class="glass-card build-panel-preview" id="build-panel-preview">
+            <!-- Browser Window Chrome & Navigation Bar -->
+            <div class="preview-browser-header">
+              <div class="browser-controls-left">
+                <div class="browser-dots">
+                  <span class="dot red"></span>
+                  <span class="dot yellow"></span>
+                  <span class="dot green"></span>
+                </div>
+                <button class="browser-nav-btn" id="btn-preview-back" title="Back">◀</button>
+                <button class="browser-nav-btn" id="btn-preview-forward" title="Forward">▶</button>
+                <button class="browser-nav-btn" id="btn-refresh-preview" title="Refresh Live Preview">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+                </button>
+              </div>
+
+              <!-- Interactive Address / Path Bar -->
+              <div class="browser-url-bar">
+                <span class="url-protocol">http://</span>
+                <input type="text" class="url-address-input" id="preview-address-input" value="/" placeholder="/ or /login or /dashboard" title="Application Route (Press Enter to Navigate)" />
+                <button class="btn-address-go" id="btn-address-go" title="Navigate to Route">↵</button>
+                <div class="preview-loading-spinner hidden" id="preview-loading-spinner" title="Loading preview..."></div>
+                <span class="url-status-pill status-live" id="preview-status-pill">● LIVE COMPILED</span>
+              </div>
+
+              <!-- Viewport Presets & Window Actions -->
+              <div class="browser-actions">
+                <div class="viewport-toggle-group">
+                  <button class="vp-btn active" id="btn-vp-desktop" data-vp="desktop" title="Desktop Viewport (100%)">🖥️</button>
+                  <button class="vp-btn" id="btn-vp-tablet" data-vp="tablet" title="Tablet Viewport (768px)">📱</button>
+                  <button class="vp-btn" id="btn-vp-mobile" data-vp="mobile" title="Mobile Viewport (375px)">📲</button>
+                </div>
+                <button class="icon-btn-sm" id="btn-open-preview-tab" title="Open Preview in New Browser Tab">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                </button>
+                <button class="icon-btn-sm" id="btn-toggle-preview-fullscreen" title="Toggle Fullscreen Preview">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+                </button>
+                <button class="icon-btn-sm btn-export-zip" id="btn-export-project-zip" title="Export Project as Standalone ZIP (Docker-ready)">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                  <span>ZIP</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Preview Error Banner (slides down on build or runtime errors) -->
+            <div class="preview-error-banner hidden" id="preview-error-banner">
+              <div class="err-text-wrap">
+                <span class="err-icon">⚠️</span>
+                <span class="err-message" id="preview-error-message">Runtime error detected in preview application</span>
+              </div>
+              <button class="btn btn-xs btn-primary" id="btn-retry-preview">Retry & Rebuild</button>
+            </div>
+
+            <!-- Viewport Stage Container -->
+            <div class="preview-viewport-stage" id="preview-viewport-stage">
+              <div class="preview-device-frame vp-desktop" id="preview-device-frame">
+                <iframe 
+                  id="build-preview-iframe" 
+                  class="preview-iframe" 
+                  title="Generated Software Application Preview"
+                  sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-modals"
+                  src="about:blank"
+                ></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           VIEW 4: LIVE TASK BOARD (KANBAN & DEPENDENCY GRAPH)
+           =================================================================== -->
+      <section class="view-panel" id="view-tasks">
+        <div class="taskboard-layout">
+          <div class="taskboard-header">
+            <div>
+              <h2 class="section-title">Live Task Board</h2>
+              <p class="section-sub">Autonomous task distribution across the 11 AI employees. Cards transition through stages in real-time as tasks execute.</p>
+            </div>
+            <div class="taskboard-stats">
+              <span class="task-stat-item"><strong id="stat-tasks-total">11</strong> Total Tasks</span>
+              <span class="task-stat-item"><strong id="stat-tasks-active" style="color:#38bdf8">3</strong> In Flight</span>
+              <span class="task-stat-item"><strong id="stat-tasks-completed" style="color:#10b981">6</strong> Completed</span>
+            </div>
+          </div>
+
+          <!-- Kanban Columns -->
+          <div class="kanban-columns-grid">
+            <!-- Backlog -->
+            <div class="kanban-col">
+              <div class="col-header"><span class="col-dot dot-gray"></span>BACKLOG <span class="col-count" id="count-backlog">0</span></div>
+              <div class="col-cards" id="col-backlog"></div>
+            </div>
+            <!-- Assigned -->
+            <div class="kanban-col">
+              <div class="col-header"><span class="col-dot dot-blue"></span>ASSIGNED <span class="col-count" id="count-assigned">0</span></div>
+              <div class="col-cards" id="col-assigned"></div>
+            </div>
+            <!-- In Progress -->
+            <div class="kanban-col">
+              <div class="col-header"><span class="col-dot dot-cyan blink"></span>IN PROGRESS <span class="col-count" id="count-progress">0</span></div>
+              <div class="col-cards" id="col-progress"></div>
+            </div>
+            <!-- Code Review -->
+            <div class="kanban-col">
+              <div class="col-header"><span class="col-dot dot-purple"></span>CODE REVIEW <span class="col-count" id="count-review">0</span></div>
+              <div class="col-cards" id="col-review"></div>
+            </div>
+            <!-- QA Testing -->
+            <div class="kanban-col">
+              <div class="col-header"><span class="col-dot dot-yellow"></span>QA TESTING <span class="col-count" id="count-qa">0</span></div>
+              <div class="col-cards" id="col-qa"></div>
+            </div>
+            <!-- Completed -->
+            <div class="kanban-col">
+              <div class="col-header"><span class="col-dot dot-green"></span>COMPLETED <span class="col-count" id="count-completed">0</span></div>
+              <div class="col-cards" id="col-completed"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           VIEW 5: TEAM & AGENTS (11 SPECIALISTS ROSTER)
+           =================================================================== -->
+      <section class="view-panel" id="view-team">
+        <div class="team-layout">
+          <div class="team-header">
+            <div>
+              <h2 class="section-title">AI Employee Squad</h2>
+              <p class="section-sub">11 Specialized Autonomous Agents operating within the Virtual Software House.</p>
+            </div>
+          </div>
+          <div class="team-cards-grid" id="team-roster-grid"></div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           VIEW 6: PROJECTS (PROJECT WORKSPACE & BUDGET CEILING)
+           =================================================================== -->
+      <section class="view-panel" id="view-projects">
+        <div class="projects-layout">
+          <!-- Active Project Overview -->
+          <div class="glass-card project-detail-card">
+            <div class="kpi-header">
+              <span class="kpi-label">ACTIVE ENTERPRISE PROJECT</span>
+              <button class="btn btn-secondary btn-xs" id="btn-modal-new-project">+ New Project</button>
+            </div>
+            <h1 class="project-headline" id="pview-name">Nexus Cloud Store Engine</h1>
+            <p class="project-summary" id="pview-desc">Next-generation microservices eCommerce engine with real-time inventory and Stripe billing.</p>
+
+            <div class="budget-burn-meter">
+              <div class="meter-info-row">
+                <span class="meter-title">TOKEN CEILING & HARD-STOP EXPENDITURE</span>
+                <span class="meter-pct" id="pview-budget-pct">0% Used</span>
+              </div>
+              <div class="meter-track"><div class="meter-fill" id="pview-budget-fill" style="width: 0%"></div></div>
+              <div class="meter-sub-row">
+                <span id="pview-tokens-used">0 used / 125,000 cap</span>
+                <span id="pview-usd-spent">$0.0000 / $25.00</span>
+                <button class="btn btn-outline btn-xs" id="btn-modal-increase-budget">+ Add Token Budget</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project List -->
+          <div class="glass-card projects-list-card">
+            <div class="panel-header">
+              <span class="panel-title">All Workspace Projects</span>
+            </div>
+            <div class="projects-table-wrap">
+              <table class="projects-table" id="projects-table">
+                <thead>
+                  <tr>
+                    <th>Project ID</th>
+                    <th>Name</th>
+                    <th>Tokens Used</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="projects-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           VIEW 7: APPROVALS (EXPLICIT HUMAN APPROVAL GATEWAY)
+           =================================================================== -->
+      <section class="view-panel" id="view-approvals">
+        <div class="approvals-layout">
+          <div class="glass-card approvals-main-card">
+            <div class="approvals-top">
+              <div class="alert-icon-shield">🛡️</div>
+              <div>
+                <h2 class="section-title">Cryptographic Human Approval Gate</h2>
+                <p class="section-sub">Non-bypassable safety barrier. Production deployments, budget increases, and destructive operations strictly require explicit operator authorization.</p>
+              </div>
+            </div>
+
+            <div class="pending-approvals-list" id="approvals-list">
+              <div class="approval-card pending">
+                <div class="approval-badge-row">
+                  <span class="badge badge-danger">CRITICAL RISK</span>
+                  <span class="badge badge-warning">AWAITING SIGNATURE</span>
+                </div>
+                <h3 class="approval-action-title">PRODUCTION_DEPLOYMENT</h3>
+                <p class="approval-reason-text">Release candidate v1.0.0 passed automated QA testing suite. Explicit operator approval required before pushing to live production.</p>
+                <div class="approval-payload-box">
+                  <pre><code>{
+  "releaseTarget": "us-east-1.prod",
+  "version": "v1.0.0-rc4",
+  "qaVerification": "PASS"
+}</code></pre>
+                </div>
+                <div class="approval-actions-row">
+                  <button class="btn btn-danger btn-sm" id="btn-quick-reject">Reject Request</button>
+                  <button class="btn btn-success btn-sm" id="btn-quick-approve">Sign & Authorize Release</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           VIEW 8: ACTIVITY & LOGS (SSE REAL-TIME TELEMETRY STREAM)
+           =================================================================== -->
+      <section class="view-panel" id="view-logs">
+        <div class="logs-layout">
+          <div class="glass-card logs-panel">
+            <div class="logs-header">
+              <div class="header-left">
+                <span class="status-dot dot-live blink"></span>
+                <span class="panel-title">Real-Time Event Stream & Immutable SQLite Audit Trail</span>
+              </div>
+              <button class="btn btn-outline btn-xs" id="btn-clear-logs">Clear Terminal</button>
+            </div>
+            <div class="logs-terminal" id="global-telemetry-terminal">
+              <div class="log-line system">[SYSTEM] Synapse Autonomous Multi-Agent Control Center telemetry online.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           VIEW 9: SETTINGS
+           =================================================================== -->
+      <section class="view-panel" id="view-settings">
+        <div class="settings-layout">
+          <div class="glass-card settings-card">
+            <h2 class="section-title">System Settings & Governance</h2>
+            <p class="section-sub">Configure display parameters, accessibility, sound effects, and LLM provider credentials.</p>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-name">Accessibility: Reduced Motion</span>
+                <span class="setting-desc">Minimizes canvas animations and character walking speeds for motion sensitivity.</span>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="setting-reduced-motion">
+                <span class="slider round"></span>
+              </label>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-name">Spatial Office Sound Effects</span>
+                <span class="setting-desc">Synthesized Web Audio clicks, terminal chimes, and alert tones.</span>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="setting-sound-effects" checked>
+                <span class="slider round"></span>
+              </label>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-name">Gemini LLM Provider Mode</span>
+                <span class="setting-desc" id="setting-llm-desc">Currently running in Intelligent Simulation Mode (Zero API Key needed).</span>
+              </div>
+              <span class="badge badge-primary" id="setting-llm-badge">SIMULATION MODE</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- ── MODAL 1: EXPLICIT HUMAN APPROVAL GATE ──────────────────────────── -->
+  <div class="modal-overlay" id="approval-modal">
+    <div class="glass-card modal-container">
+      <div class="modal-header">
+        <div class="modal-title-row">
+          <div class="alert-icon-critical">⚠️</div>
+          <div>
+            <h3 class="modal-title">EXPLICIT HUMAN APPROVAL REQUIRED</h3>
+            <p class="modal-sub">Gated Action: <strong id="modal-action-type">PRODUCTION_DEPLOYMENT</strong></p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="btn-close-approval-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="security-warning-box">
+          <strong>Non-Bypassable Safety Policy:</strong> No AI employee may trigger production deployments or budget escalations without direct signed authorization from a verified human stakeholder.
+        </div>
+        <div class="diff-viewer">
+          <div class="diff-header"><span>Action Payload & Manifest</span><span class="badge badge-danger">CRITICAL RISK</span></div>
+          <pre class="diff-content" id="modal-payload-content">{}</pre>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Operator Signature</label>
+          <input type="text" class="form-control" id="operator-name-input" value="Naveen (Chief Architect)">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Review Notes</label>
+          <textarea class="form-control" id="operator-notes-input" rows="2">QA verification passed. Explicit approval granted.</textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="btn-modal-cancel">Cancel</button>
+        <button class="btn btn-danger" id="btn-modal-reject">Explicitly Reject</button>
+        <button class="btn btn-success" id="btn-modal-approve">Sign & Authorize Release</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MODAL 2: BUDGET ADJUSTMENT ────────────────────────────────────── -->
+  <div class="modal-overlay" id="budget-modal">
+    <div class="glass-card modal-container modal-sm">
+      <div class="modal-header">
+        <h3 class="modal-title">Adjust Token Budget</h3>
+        <button class="modal-close-btn" id="btn-close-budget-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Additional Tokens</label>
+          <input type="number" class="form-control" id="add-tokens-input" value="50000" step="10000">
+          <span class="form-help">50,000 tokens &approx; $0.10</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Authorized By</label>
+          <input type="text" class="form-control" id="budget-operator-input" value="Naveen (Project Owner)">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="btn-cancel-budget">Cancel</button>
+        <button class="btn btn-primary" id="btn-confirm-budget">Grant Budget</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MODAL 3: AUTONOMOUS IDEA-TO-WORKING-SOFTWARE BUILDER ──────────── -->
+  <div class="modal-overlay" id="modal-build-project">
+    <div class="glass-card modal-container modal-build-box">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="section-badge"><span class="badge-dot pulse-dot active"></span>END-TO-END AUTONOMOUS PIPELINE</div>
+          <h3 class="modal-title">🚀 Launch Autonomous AI Software Build</h3>
+          <p class="modal-subtitle">Enter your project title or brief. The 11 AI specialists will plan, write code, run sandboxed tests, self-heal bugs, and deliver a working application.</p>
+        </div>
+        <button class="modal-close-btn" id="btn-close-build-modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Quick Idea Presets -->
+        <div class="modal-presets-row">
+          <span class="presets-tag">Quick Templates:</span>
+          <button type="button" class="preset-chip" data-title="Smart E-Commerce Platform" data-desc="Build an e-commerce website with login, products, cart, payments, admin dashboard, and order tracking." data-type="E-Commerce Platform">🛒 E-Commerce Platform</button>
+          <button type="button" class="preset-chip" data-title="Real-Time Collaborative Network" data-desc="Multi-channel chat engine with user presence, channel history, and WebSocket/SSE sync." data-type="Real-Time Chat & Collaboration">💬 Real-Time Chat</button>
+          <button type="button" class="preset-chip" data-title="Zero-Trust Identity Gateway" data-desc="Enterprise auth gateway with JWT verification, password hashing, and role-based access control." data-type="Zero-Trust Auth & Identity">🔐 Auth & Identity Gateway</button>
+          <button type="button" class="preset-chip" data-title="Cloud Telemetry & Metrics Studio" data-desc="Real-time analytics dashboard with metric streaming, charts, and alert threshold notifications." data-type="Analytics & Telemetry">📊 Analytics Dashboard</button>
+        </div>
+
+        <!-- Validation Alert Banner -->
+        <div id="build-validation-alert" class="build-validation-alert" style="display:none; padding:10px 14px; margin-bottom:14px; border-radius:8px; background:rgba(239, 68, 68, 0.15); border:1px solid rgba(239, 68, 68, 0.4); color:#fca5a5; font-size:13px; font-weight:500;" role="alert"></div>
+
+        <!-- Project Title (Required) -->
+        <div class="form-group">
+          <label class="form-label required">Project Title or Description <span class="required-star">*</span></label>
+          <input type="text" class="form-control form-control-lg" id="input-build-title" value="" placeholder="Describe the project you want to build (e.g. Hospital Patient Portal, Real-Time Fleet Manager)...">
+          <span class="form-help">Enter your custom project idea or prompt. The 11 AI specialists will analyze requirements, synthesize architecture, and generate working code.</span>
+        </div>
+
+        <!-- Optional Description -->
+        <div class="form-group">
+          <label class="form-label">Detailed Requirements & Specifications (Optional)</label>
+          <textarea class="form-control" id="input-build-desc" rows="3" placeholder="Enter specific features, database models, security requirements, edge cases, or acceptance criteria..."></textarea>
+        </div>
+
+        <!-- Optional Application Type -->
+        <div class="form-group">
+          <label class="form-label">Target Architecture & Application Type</label>
+          <select class="form-control" id="select-build-type">
+            <option value="Auto-Detect" selected>Auto-Detect Architecture & Tech Stack (Recommended)</option>
+            <option value="E-Commerce Platform">E-Commerce Platform (Catalog, Cart, Orders, Admin)</option>
+            <option value="Real-Time Chat & Collaboration">Real-Time Chat & Collaboration Engine</option>
+            <option value="Zero-Trust Identity & Auth Gateway">Zero-Trust Identity & Authentication Gateway</option>
+            <option value="Analytics & Telemetry Dashboard">Analytics & Telemetry Dashboard</option>
+            <option value="Task & Workflow Management Kanban">Task & Workflow Management Kanban</option>
+            <option value="Modern Responsive Web Application">Modern Responsive Single-Page Application</option>
+          </select>
+        </div>
+
+        <!-- Collapsible Advanced Settings -->
+        <details class="advanced-settings-wrap" id="build-advanced-toggle">
+          <summary class="advanced-summary">⚙️ Advanced Architecture & Budget Settings</summary>
+          <div class="advanced-settings-grid">
+            <div class="form-group">
+              <label class="form-label">Token Quota Limit</label>
+              <input type="number" class="form-control" id="input-build-budget-tokens" value="150000" step="25000">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Max Budget (USD)</label>
+              <input type="number" class="form-control" id="input-build-budget-usd" value="20.00" step="5.00">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Max Self-Healing Attempts</label>
+              <input type="number" class="form-control" id="input-build-max-retries" value="3" min="1" max="5">
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" id="btn-cancel-build-modal">Cancel</button>
+        <button type="button" class="btn btn-primary btn-lg btn-build-action" id="btn-submit-build-project">
+          <span class="btn-rocket">🚀</span>
+          <strong>Build Project</strong>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MODAL 4: PERSISTENT AUDIT REPORT & VERIFICATION ────────────── -->
+  <div class="modal-overlay" id="modal-audit-report" style="display:none">
+    <div class="glass-card modal-container modal-lg">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="modal-badge-row">
+            <span class="audit-scope-pill" id="modal-audit-status">VERIFIED</span>
+            <span class="audit-run-id-tag" id="modal-audit-run-id">run-none</span>
+          </div>
+          <h3 class="modal-title">Persistent Audit & Requirement Report</h3>
+          <p class="modal-subtitle">Comprehensive traceability record, browser test evidence, build logs, and 12-dimension verification results.</p>
+        </div>
+        <button class="modal-close-btn" id="btn-close-audit-modal">&times;</button>
+      </div>
+      <div class="modal-body modal-scrollable-body">
+        <div class="audit-modal-tabs">
+          <button class="btn btn-xs btn-primary modal-tab-btn active" id="modal-tab-btn-summary">Executive Summary</button>
+          <button class="btn btn-xs btn-outline modal-tab-btn" id="modal-tab-btn-raw">Raw JSON Artifact</button>
+        </div>
+        <div class="audit-modal-tab-content active" id="modal-tab-summary">
+          <div class="audit-report-viewer" id="modal-audit-summary-content">
+            <!-- Rendered Summary -->
+          </div>
+        </div>
+        <div class="audit-modal-tab-content" id="modal-tab-raw" style="display:none">
+          <pre class="code-editor-pane" id="modal-audit-raw-content"><code>Loading audit report...</code></pre>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" id="btn-modal-close-audit-btn">Close Report</button>
+        <button type="button" class="btn btn-secondary" id="btn-copy-audit-report">📋 Copy Report</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Backward Compatibility Alias -->
+  <div class="modal-overlay" id="new-project-modal" style="display:none">
+    <input type="hidden" id="new-proj-name" value="Autonomous App">
+    <input type="hidden" id="new-proj-desc" value="Autonomous App">
+    <input type="hidden" id="new-proj-budget" value="100000">
+  </div>
+
+  <!-- Main JavaScript Controller -->
+  <script src="app.js"></script>
+</body>
+</html>

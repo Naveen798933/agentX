@@ -1,0 +1,44 @@
+#!/bin/bash
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export ELECTRON_RUN_AS_NODE=1
+
+# If command is a package manager lifecycle operation, delegate to system npm
+FIRST_ARG="$1"
+if [ "$FIRST_ARG" = "install" ] || [ "$FIRST_ARG" = "i" ] || [ "$FIRST_ARG" = "ci" ] || [ "$FIRST_ARG" = "update" ] || [ "$FIRST_ARG" = "audit" ] || [ "$FIRST_ARG" = "outdated" ] || [ "$FIRST_ARG" = "--version" ] || [ "$FIRST_ARG" = "-v" ] || [ "$FIRST_ARG" = "pack" ] || [ "$FIRST_ARG" = "list" ] || [ "$FIRST_ARG" = "ls" ]; then
+  SYSTEM_NPM=$(which -a npm 2>/dev/null | grep -v "$DIR/npm" | head -n 1)
+  if [ -n "$SYSTEM_NPM" ] && [ -x "$SYSTEM_NPM" ]; then
+    exec "$SYSTEM_NPM" "$@"
+  elif [ -x "/usr/local/bin/npm" ]; then
+    exec "/usr/local/bin/npm" "$@"
+  fi
+fi
+
+"$DIR/node" -e '
+const fs = require("fs");
+const { spawnSync } = require("child_process");
+let pkg = {};
+try {
+  pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
+} catch (_) {}
+
+const args = process.argv.slice(1);
+let cmd = args[0] === "run" ? args[1] : args[0];
+if (!cmd) cmd = "start";
+
+const script = (pkg.scripts && pkg.scripts[cmd]) || (cmd === "dev" ? pkg.scripts.server : null);
+if (!script) {
+  // If not a package.json script, fallback to system npm
+  try {
+    const { execSync } = require("child_process");
+    const sysNpm = execSync("which -a npm | grep -v \"bin/npm\" | head -n 1", { encoding: "utf8" }).trim();
+    if (sysNpm) {
+      const res = spawnSync(sysNpm, args, { stdio: "inherit" });
+      process.exit(res.status ?? 0);
+    }
+  } catch (_) {}
+  console.error("npm: script not found:", cmd);
+  process.exit(1);
+}
+const res = spawnSync(script, { shell: true, stdio: "inherit" });
+process.exit(res.status ?? 0);
+' "$@"
