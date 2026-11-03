@@ -77,6 +77,26 @@ export class PostgresStorageAdapter {
   }
 
   /**
+   * Acquire a dedicated client from the pool
+   */
+  async connect() {
+    return this.pool.connect();
+  }
+
+  /**
+   * Ping / test the database connection
+   */
+  async testConnection() {
+    const client = await this.pool.connect();
+    try {
+      await client.query('SELECT 1');
+      return true;
+    } finally {
+      client.release();
+    }
+  }
+
+  /**
    * Execute single parameterized query against the connection pool
    */
   async query(text, params = []) {

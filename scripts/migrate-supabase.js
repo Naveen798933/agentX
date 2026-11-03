@@ -32,7 +32,7 @@ async function run() {
 
   console.log('⚡ Connecting to Supabase PostgreSQL at:', connStr.replace(/:([^:@]+)@/, ':****@'));
   const adapter = new PostgresStorageAdapter({ connectionString: connStr });
-  await adapter.connect();
+  await adapter.testConnection();
 
   try {
     const migrationsDir = path.resolve(__dirname, '../src/storage/migrations');
@@ -56,3 +56,4 @@ async function run() {
 }
 
 run();
+
